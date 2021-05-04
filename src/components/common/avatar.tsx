@@ -50,9 +50,10 @@ export function Avatar() {
           <MenuItem label="Modo oscuro" />
           <MenuItem label="Soporte" />
         </MenuItemGroup> */}
-        <Divider />
-        <MenuItemGroup>
-          <MenuItem label="Cerrar sesion" onClick={logout} />
+        {/* <Divider /> */}
+        {/* <MenuItemGroup className="bg-white rounded-md w-64"> */}
+        <MenuItemGroup style={{width:"14rem"}} className="bg-white rounded-md w-64">
+          <MenuItem label="Log Out" onClick={logout} />
         </MenuItemGroup>
       </PopOver>
     </div>
