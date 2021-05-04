@@ -259,7 +259,10 @@ function Content() {
   useEffect(() => {
     if (!!test1?.id) {
       setLoading(false)
+    } else if (!test1?.id) {
+      setLoading(false)
     }
+
     if (!!test2?.id) {
       setLoading(false)
     }
@@ -274,6 +277,8 @@ function Content() {
 }
 
 function SetScenariotoContent({count1, count2, scenario, testActived, runName, runStartTime}) {
+  // @ts-ignore
+  const { setLoading } = useLoading()
 
   const {
     id,
@@ -293,13 +298,21 @@ function SetScenariotoContent({count1, count2, scenario, testActived, runName, r
 
   useEffect(() => {
     if (testActived === "true1") {
-      setTest1({id, name, description, errorStates, duration, steps, tags, runName, runStartTime,})
+      if (runName === "stop") {
+        setLoading(false)
+      } else {
+        setTest1({id, name, description, errorStates, duration, steps, tags, runName, runStartTime,})
+      }
     }
   }, [count1])
 
   useEffect(() => {
     if (testActived === "true2") {
-      setTest2({id, name, description, errorStates, duration, steps, tags, runName, runStartTime,})
+      if (runName === "stop") {
+        setLoading(false)
+      } else {
+        setTest2({id, name, description, errorStates, duration, steps, tags, runName, runStartTime,})
+      }
     }
   }, [count2])
 
@@ -319,7 +332,7 @@ function ScenarioOutline({ count1, count2, scenario, tname, runName, testActived
               )
             } else {
             return (
-              <></>
+              <SetScenariotoContent  count1={count1} count2={count2} key={scenario?.id} scenario={scenario} runName={"stop"} testActived={testActived} runStartTime={"stop"}/>
             );}
           })
       )}
@@ -335,7 +348,7 @@ function Scenario({ count1, count2, scenario, tname, runName, testActived, runSt
           )
     } else {
     return (
-      <></>
+      <SetScenariotoContent  count1={count1} count2={count2} key={scenario?.id} scenario={scenario} runName={"stop"} testActived={testActived} runStartTime={"stop"}/>
     );}
   } else {
     return (
@@ -405,16 +418,6 @@ function ActivateTest1({rid, state, tname, name, startTime,}) {
   )
 }
 
-// interface RadioButton1Props {
-//   i1?: string;
-//   onChange?: any;
-//   tname?:string; 
-//   name?:string; 
-//   status?:string; 
-//   startTime?:string;
-//   rid?:string;
-// }
-
 const RadioButton1 = ({ rid, i1, tname, name, startTime, }) => {
   const [state, setstate] = useState({actived:false,count:0})
 
@@ -443,16 +446,6 @@ function ActivateTest2({rid, state, tname, name, startTime,}) {
     </>
   )
 }
-
-// interface RadioButton2Props {
-//   i2?: string;
-//   onChange?: any;
-//   tname?:string; 
-//   name?:string; 
-//   status?:string; 
-//   startTime?:string;
-//   rid?:string;
-// }
 
 const RadioButton2 = ({ rid, i2, tname, name, startTime, }) => {
   const [state, setstate] = useState({actived:false,count:0})
