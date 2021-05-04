@@ -60,9 +60,8 @@ export function Home() {
     size: 5,
     name: ""
   });
-  const { query, route, asPath } = useRouter();
+  const { query } = useRouter();
   const { mutateProject } = useProject(query.id as string);
-  const { runs, isLoading: isLoadingRuns, mutateRuns } = useRuns(filters);
   const alert = useAlert();
   const notitication = useNotification();
   const { projects, isLoading } = useProjects(filters);
@@ -81,7 +80,6 @@ export function Home() {
       try {
         await removeProject(id);
         mutateProject();
-        mutateRuns();
         notitication.show({
           title: "Exito",
           type: "success",
