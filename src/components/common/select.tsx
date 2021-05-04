@@ -156,7 +156,7 @@ export function Select({ name, options, selected, onSelect }: SelectProps) {
                   "py-1",
                   "pl-3",
                   "pr-9",
-                  "hover:bg-gray-200"
+                  "transition duration-200 hover:bg-gray-200"
                 )}
                 onClick={handleSelect(option)}
               >
