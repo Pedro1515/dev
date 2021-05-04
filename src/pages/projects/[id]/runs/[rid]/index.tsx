@@ -577,7 +577,7 @@ function FeatureHeading({ created, name, tags }) {
         <div>
           <div className="text-base font-medium">{name}</div>
           <div className="text-sm mt-1">
-            Created el {format(new Date(created), "dd/MM/yyyy HH:ss")}
+            Created on {format(new Date(created), "dd/MM/yyyy HH:ss")}
           </div>
           <div className="-mx-2">
             {tags?.map((tag) => (

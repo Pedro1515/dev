@@ -79,23 +79,23 @@ function RunsTable() {
         notitication.show({
           title: "Exito",
           type: "success",
-          message: `El run ${name} ha sido eliminado correctamente.`,
+          message: `The run "${name}" has been successfully removed.`,
         });
       } catch (error) {
         notitication.show({
           title: "Error",
           type: "error",
-          message: `Se produjo un error al intentar eliminar el run. Intente mas tarde.`,
+          message: `An error occurred while trying to delete the run. Try again later.`,
         });
       }
     };
 
     alert.show({
-      title: `Eliminar ${name}`,
+      title: `Delete "${name}"`,
       body:
-        "Estas seguro que quieres eliminarlo? Se perderan todos los datos asociados.",
+        `Are you sure you want to delete "${name}"? All associated data will be lost.`,
       onConfirm,
-      action: "Eliminar",
+      action: "Delete",
     });
   };
 
@@ -215,7 +215,7 @@ function RunsTable() {
         Cell: ({ row }) => (
           <MenuDropdown
             items={[
-              [{ label: "Eliminar", style: {paddingRight:'3rem', paddingBottom:'0.25rem', paddingTop:'0.25rem'}, onClick: handleDeleteRun(row.original) }],
+              [{ label: "Delete", style: {paddingRight:'3rem', paddingBottom:'0.25rem', paddingTop:'0.25rem'}, onClick: handleDeleteRun(row.original) }],
             ]}
             label={
               <div className="h-5 w-5">
@@ -265,7 +265,7 @@ function GeneralCard() {
         <div className="w-11/12">
           <Title className="text-gray-700 font-semibold">General</Title>
           <Caption>
-            Created el {format(new Date(createdAt || null), "dd/MM/yyyy HH:ss")}
+            Created on {format(new Date(createdAt || null), "dd/MM/yyyy HH:ss")}
           </Caption>
           <DataDisplayWrapper>
             <DataDisplay label="Project Runs" value={runQuantity} />
@@ -409,7 +409,7 @@ function FailuresCard() {
   return (
     <Card className="flex-col w-1/3 p-2">
       <div className="px-6">
-        <Title className="text-gray-700 font-semibold">Fallos</Title>
+        <Title className="text-gray-700 font-semibold">Faults</Title>
         <Caption>Last  {size} runs</Caption>
       </div>
       <div className="flex-center mt-6 mr-6">

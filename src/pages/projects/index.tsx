@@ -83,23 +83,23 @@ export function Home() {
         notitication.show({
           title: "Exito",
           type: "success",
-          message: `El proyecto ${name} ha sido eliminado correctamente.`,
+          message: `The project "${name}" has been successfully removed.`,
         });
       } catch (error) {
         notitication.show({
           title: "Error",
           type: "error",
-          message: `Se produjo un error al intentar eliminar el proyecto. Intente mas tarde.`,
+          message: `An error occurred while trying to delete the project. Try again later.`,
         });
       }
     };
 
     alert.show({
-      title: `Eliminar ${name}`,
+      title: `Delete "${name}"`,
       body:
-        "Estas seguro que quieres eliminarlo? Se perderan todos los datos asociados.",
+        `Are you sure you want to delete "${name}"? All associated data will be lost.`,
       onConfirm,
-      action: "Eliminar",
+      action: "Delete",
     });
   };
 
@@ -167,7 +167,7 @@ export function Home() {
         Cell: ({ row }) => (
           <MenuDropdown
             items={[
-              [{ label: "Eliminar", style: {paddingRight:'3rem', paddingBottom:'0.25rem', paddingTop:'0.25rem'}, onClick: handleDeleteProject(row.original) }],
+              [{ label: "Delete", style: {paddingRight:'3rem', paddingBottom:'0.25rem', paddingTop:'0.25rem'}, onClick: handleDeleteProject(row.original) }],
             ]}
             label={
               <div className="h-5 w-5">
