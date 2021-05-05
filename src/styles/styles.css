@@ -1,0 +1,34 @@
+li {
+  outline: none;
+}
+
+.outline-red {
+  outline: 2px solid #f56565;
+  outline-style: auto;
+}
+
+.outline-green {
+  outline: 2px solid #48bb78;
+  outline-style: auto;
+}
+
+.outline-gray {
+  outline: 2px solid #718096;
+  outline-style: auto;
+}
+
+.overflow-y-overlay {
+  overflow-y: overlay;
+}
+
+.max-w-50 {
+  max-width: 50%;
+}
+
+.details-node-html a {
+  display: none;
+}
+
+.details-node-html textarea {
+  width: 100%;
+}
