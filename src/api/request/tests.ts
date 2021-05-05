@@ -5,5 +5,9 @@ interface PostRequest {
   errorStates: string[];
 }
 
-export const updateTest = async (request: PostRequest) =>
-  await apiInstance.post("/rest/tests/update", request);
+export const updateTest = async (request: PostRequest) => {
+  let response = await apiInstance.post("/rest/tests/update", request)
+  const { errorStates } = response?.data
+  const { status } = response
+  return { errorStates, status }
+}

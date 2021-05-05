@@ -147,7 +147,7 @@ function FeatureItem({ name, status, isActive, onClick }: FeatureItemProps) {
 
 function ErrorStateMenuDropdown({ id, errors, featureId }) {
   const { query } = useRouter();
-  const { mutateTests:mutateAllTests } = useTests({ "deep-populate": true, id: featureId });
+  const { mutateTests } = useTests({ "deep-populate": true, id: featureId });
   // @ts-ignore
   const { setUiData } = useUiData()
 
@@ -155,24 +155,23 @@ function ErrorStateMenuDropdown({ id, errors, featureId }) {
   const { project } = useProject(run?.project);
   const { errorState } = project ?? {};
 
-  const handleErrorState = (error) => async (event) => {
+  const updateErrorState = (error) => async (event) => {
+    event.stopPropagation();
     setUiData(true)
-    updateTest({ id, errorStates: [error] });
-    
-    const done = await mutateAllTests()
-    console.log(done);
-    
-    if (done) {
+    const { status } = await updateTest({ id, errorStates: [error] });
+
+    if (status === 201) {
+      await mutateTests()
       setUiData(false)
     }
-  };
+  }
 
   return (
     <MenuDropdown
       items={[
         errorState?.map((error) => ({
           label: error,
-          onClick: handleErrorState(error),
+          onClick: updateErrorState(error),
           selected: errors ? errors.includes(error) : false,
           style: {paddingRight:'3rem'},
         })),
