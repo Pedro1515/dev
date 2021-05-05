@@ -429,25 +429,6 @@ function ScenarioHeader({ id, name, duration, tags, status, errors, featureName 
         {/* {errors && <ErrorStateMenuDropdown {...{ id, errors }} />} */}
       </div>
       {featureName && <p className="px-2 inline-block rounded bg-gray-600 text-sm font-medium text-white">Feature: {featureName}</p>}
-      {errors?.length > 0 && (
-        <div className="flex items-center">
-          <div className="font-medium text-sm">Exceptions</div>
-          {errors.map((error) => (
-            <Badge
-              key={error}
-              IconComponent={
-                <div className="text-red-700 w-3 h-3 mr-2">
-                  <ExclamationSolidIcon />
-                </div>
-              }
-              className="m-2"
-              uppercase={false}
-              color="red"
-              label={error}
-            />
-          ))}
-        </div>
-      )}
     </div>
   );
 }
