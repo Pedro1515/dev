@@ -1,0 +1,16 @@
+variables:
+  APP_NAME: ${CI_PROJECT_NAME}
+  LAN: "react"
+  API_URL: "API_URL="http://vps2.crowdaronline.com:8082"
+
+stages:
+  - Build
+  - Publish
+  - Package
+
+include:
+  - project: 'crowdaronline/lippia/products/template-ci'
+    ref: master
+    file: 
+      - 'Build.yml'
+      - 'Package.yml'
