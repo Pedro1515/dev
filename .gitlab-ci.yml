@@ -1,11 +1,10 @@
 variables:
   APP_NAME: ${CI_PROJECT_NAME}
   LAN: "react"
-  API_URL: "API_URL="http://vps2.crowdaronline.com:8082"
+  API_URL: "http://vps2.crowdaronline.com:8082"
 
 stages:
   - Build
-  - Publish
   - Package
 
 include:
