@@ -813,29 +813,24 @@ function Run() {
   const { project } = useProject(run?.project);
   const { errorState } = project ?? {};
 
-  //@ts-ignore
-  const { cursorWait } = useContext(CursorWaitContext)
-
   // @ts-ignore
   const { scrollable } = useScrollable()
   return (
-    <div className={`${cursorWait && 'cursor-wait'}`}>
-      <Layout>
-          <LayoutHeader>
-            <div className="flex space-x-4">
-              {project?.name !== undefined && <Breadcrumd project={project} runName={run?.name} runs={runs}/>}
-            </div>
-            <Summary run={run} />
-          </LayoutHeader>
-          <LayoutContent scrollable={scrollable}>
-            <ButtonsWrapper>
-              <Search selectedFeatureId={id} />
-              <ButtonsFilters errorState={errorState} asPath={asPath} />
-            </ButtonsWrapper>
-            <FeatureWrapper feature={feature} features={features}/>
-          </LayoutContent>
-      </Layout>
-    </div>
+    <Layout>
+        <LayoutHeader>
+          <div className="flex space-x-4">
+            {project?.name !== undefined && <Breadcrumd project={project} runName={run?.name} runs={runs}/>}
+          </div>
+          <Summary run={run} />
+        </LayoutHeader>
+        <LayoutContent scrollable={scrollable}>
+          <ButtonsWrapper>
+            <Search selectedFeatureId={id} />
+            <ButtonsFilters errorState={errorState} asPath={asPath} />
+          </ButtonsWrapper>
+          <FeatureWrapper feature={feature} features={features}/>
+        </LayoutContent>
+    </Layout>
   );
 }
 

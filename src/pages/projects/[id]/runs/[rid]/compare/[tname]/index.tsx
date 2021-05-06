@@ -558,17 +558,15 @@ function LayoutCompare() {
     projectId: id as string,
   });
   return (
-    <div className={`${cursorWait && "cursor-wait"}`}>
-      <Layout>
-        <LayoutHeader>
-          {project?.name !== undefined && <Breadcrumd project={project} runName={run?.name} runs={runs}/>}
-        </LayoutHeader>
-        <div className="md:flex lg:flex xl:flex h-screen bg-white overflow-hidden">
-          <NavMenu tname={tname} runs={runs?.content.map(r => r )} />
-          <Content />
-        </div>
-      </Layout>
-    </div>
+    <Layout>
+      <LayoutHeader>
+        {project?.name !== undefined && <Breadcrumd project={project} runName={run?.name} runs={runs}/>}
+      </LayoutHeader>
+      <div className="md:flex lg:flex xl:flex h-screen bg-white overflow-hidden">
+        <NavMenu tname={tname} runs={runs?.content.map(r => r )} />
+        <Content />
+      </div>
+    </Layout>
   )
 }
 

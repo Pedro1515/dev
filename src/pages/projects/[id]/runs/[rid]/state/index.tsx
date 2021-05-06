@@ -568,22 +568,20 @@ const LayoutState = () => {
   }, [name])
   
   return (
-    <div className={`${cursorWait && "cursor-wait"}`}>
-      <Layout>
-        <LayoutHeader>
-          {project?.name !== undefined && <Breadcrumd project={project} runName={run?.name} runs={runs}/>}
-        </LayoutHeader>
-        <div className="md:flex lg:flex xl:flex h-screen bg-white overflow-hidden">
-            <div className="w-100 md:w-64 lg:w-64 xl:w-64 overflow-y-auto flex-shrink-0 overflow-x-hidden border-r">
-              {errorState && <NavMenu errorState={errorState} />}
-            </div>
-            <div className="w-full h-full">
-              <Content />
-            </div>
-            <FormModal />
-        </div>
-      </Layout>
-    </div>
+    <Layout>
+      <LayoutHeader>
+        {project?.name !== undefined && <Breadcrumd project={project} runName={run?.name} runs={runs}/>}
+      </LayoutHeader>
+      <div className="md:flex lg:flex xl:flex h-screen bg-white overflow-hidden">
+          <div className="w-100 md:w-64 lg:w-64 xl:w-64 overflow-y-auto flex-shrink-0 overflow-x-hidden border-r">
+            {errorState && <NavMenu errorState={errorState} />}
+          </div>
+          <div className="w-full h-full">
+            <Content />
+          </div>
+          <FormModal />
+      </div>
+    </Layout>
   );
 };
 
