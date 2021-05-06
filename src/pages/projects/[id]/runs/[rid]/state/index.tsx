@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Layout,
   Badge,
@@ -16,7 +16,7 @@ import {
   useProject,
   useRuns,
 } from "src/utils/hooks";
-import { ProtectRoute } from "src/context";
+import { ProtectRoute, CursorWaitContext } from "src/context";
 import {
   CheckCircleIcon,
   ClockIcon,
@@ -108,23 +108,6 @@ function useScroll() {
     throw new Error("useScroll must be used within a ScrollProvider");
   }
   return contextScroll;
-}
-
-// @ts-ignore
-const LoadingContext = React.createContext();
-
-function LoadingProvider(props) {
-  const [loading, setLoading] = React.useState(false);
-  const value = { loading, setLoading };
-  return <LoadingContext.Provider value={value} {...props} />;
-}
-
-function useLoading() {
-  const contextLoading = React.useContext(LoadingContext);
-  if (!contextLoading) {
-    throw new Error("useLoading must be used within a LoadingProvider");
-  }
-  return contextLoading;
 }
 
 // agregando features al context
@@ -272,6 +255,9 @@ function StepsCard({ steps = [], bddType }) {
 }
 
 function TestCard({ id, name, errorStates, duration, steps, runName, featureId, description, fetureName, errorStateTest, bddType }) {
+  //@ts-ignore
+  const { cursorWait, setCursorWait } = useContext(CursorWaitContext)
+
   const formattedDuration = customFormatDuration({ start: 0, end: duration });
   const [checked, setChecked] = useState(false);
   const count = Math.random();
@@ -282,17 +268,14 @@ function TestCard({ id, name, errorStates, duration, steps, runName, featureId, 
 
   // @ts-ignore
   const { modal, setModal } = useModal();
-
-  // @ts-ignore
-  const { loading, setLoading } = useLoading()
   
   const handleDeleteState = async (id, errorStateTest) => {
-    setLoading(true)
+    setCursorWait(true)
     updateTest({ id, errorStates: [errorStateTest] });
     
     const done = await mutateTests()
     if (done) {
-      setLoading(false)
+      setCursorWait(false)
     }
   };
   
@@ -316,14 +299,14 @@ function TestCard({ id, name, errorStates, duration, steps, runName, featureId, 
         <div>
           <span className="ml-2 text-sm font-medium">{name}</span>
           <div className="h-6 flex float-right">
-           <label className={`${loading && "cursor-wait"} w-6 p-1 flex-center cursor-pointer rounded opacity-75 bg-gray-300 transition duration-300 hover:bg-gray-400 mr-3`} htmlFor={`toggle${count}`}>
+           <label className={`${cursorWait && "cursor-wait"} w-6 p-1 flex-center cursor-pointer rounded opacity-75 bg-gray-300 transition duration-300 hover:bg-gray-400 mr-3`} htmlFor={`toggle${count}`}>
              <img className="w-full" src={checked ? "/assets/invisible.png" : "/assets/visible.png" }  alt={checked ? "invisible" : "visible"}/>
            </label>
-           <button className={`${loading && "cursor-wait"} px-2 flex-center cursor-pointer rounded bg-blue-500 transition duration-300 hover:bg-blue-600 focus:outline-none mr-3 focus:outline-none`} onClick={(e) => {handleModal(name, runName)}}>
+           <button className={`${cursorWait && "cursor-wait"} px-2 flex-center cursor-pointer rounded bg-blue-500 transition duration-300 hover:bg-blue-600 focus:outline-none mr-3 focus:outline-none`} onClick={(e) => {handleModal(name, runName)}}>
              <img className="w-4 mr-1" src="/assets/share-option.png" alt="share-option"/>
              <p className="text-xs text-white font-extrabold">Jira</p>
            </button>
-           <button className={`${loading && "cursor-wait"} w-6 p-1 mr-3 flex-center cursor-pointer rounded bg-red-600 transition duration-300 hover:bg-red-700 focus:outline-none onClick`} onClick={(e) => {handleDeleteState(id, errorStateTest)}}>
+           <button className={`${cursorWait && "cursor-wait"} w-6 p-1 mr-3 flex-center cursor-pointer rounded bg-red-600 transition duration-300 hover:bg-red-700 focus:outline-none onClick`} onClick={(e) => {handleDeleteState(id, errorStateTest)}}>
              <img className="w-full" src="/assets/trash.png" alt="trash"/>
            </button>
           </div>
@@ -565,8 +548,8 @@ function Content() {
 }
 
 const LayoutState = () => {
-  // @ts-ignore
-  const { loading } = useLoading()
+  //@ts-ignore
+  const { cursorWait } = useContext(CursorWaitContext)
 
   const { query } = useRouter();
   const { run } = useRun(query.rid as string);
@@ -585,7 +568,7 @@ const LayoutState = () => {
   }, [name])
   
   return (
-    <div className={`${loading && "cursor-wait"}`}>
+    <div className={`${cursorWait && "cursor-wait"}`}>
       <Layout>
         <LayoutHeader>
           {project?.name !== undefined && <Breadcrumd project={project} runName={run?.name} runs={runs}/>}
@@ -709,9 +692,7 @@ function RunWithProvider() {
       <ErrorStateTestProvider>
         <ScrollProvider>
           <ModalProvider>
-            <LoadingProvider>
-              <LayoutState />
-            </LoadingProvider>
+            <LayoutState />
           </ModalProvider>
         </ScrollProvider>
       </ErrorStateTestProvider>

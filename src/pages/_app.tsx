@@ -5,6 +5,7 @@ import { fetcher } from "src/utils";
 import "typeface-inter";
 import "src/styles/tailwind.css";
 import "src/styles/styles.css";
+import { CursorWaitProvider } from "src/context/cursor-wait-context";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -16,7 +17,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       <NotificationProvider>
         <AlertProvider>
           <AuthProvider>
-            <Component {...pageProps} />
+            <CursorWaitProvider>
+              <Component {...pageProps} />
+            </CursorWaitProvider>
           </AuthProvider>
         </AlertProvider>
       </NotificationProvider>

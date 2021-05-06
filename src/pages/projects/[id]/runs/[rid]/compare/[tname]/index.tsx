@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Badge, CheckCircleIcon, CrossCircleIcon, Layout, LayoutHeader, MediaModal, ClockIcon, TagSolidIcon, ExclamationSolidIcon, MenuDropdown } from "src/components";
-import { ProtectRoute } from "src/context";
+import { CursorWaitContext, ProtectRoute } from "src/context";
 import { customFormatDuration, useFeatures, useProject, useRun, useRuns, useTests } from "src/utils";
 import format from "date-fns/format";
 import classNames from "classnames";
@@ -79,24 +79,6 @@ function useTestActived2() {
   }
   return context;
 }
-
-// @ts-ignore
-const LoadingContext = createContext();
-
-function LoadingProvider(props) {
-  const [loading, setLoading] = useState(false)
-  const value = { loading, setLoading };
-  return <LoadingContext.Provider value={value} {...props} />;
-}
-
-function useLoading() {
-  const context = useContext(LoadingContext);
-  if (!context) {
-    throw new Error("Loading must be used within a LoadingProvider");
-  }
-  return context;
-}
-
 
 function Logs({ logs }) {
   return logs?.map(({ id, test, status, details, media }) => (
@@ -253,18 +235,18 @@ function Content() {
   // @ts-ignore
   const { test2 } = useTest2();
 
-  // @ts-ignore
-  const { setLoading } = useLoading()
+  //@ts-ignore
+  const { setCursorWait } = useContext(CursorWaitContext)
 
   useEffect(() => {
     if (!!test1?.id) {
-      setLoading(false)
+      setCursorWait(false)
     } else if (!test1?.id) {
-      setLoading(false)
+      setCursorWait(false)
     }
 
     if (!!test2?.id) {
-      setLoading(false)
+      setCursorWait(false)
     }
   }, [test1, test2])
   
@@ -278,7 +260,8 @@ function Content() {
 
 function SetScenariotoContent({count1, count2, scenario, testActived, runName, runStartTime}) {
   // @ts-ignore
-  const { setLoading } = useLoading()
+  //@ts-ignore
+  const { setCursorWait } = useContext(CursorWaitContext)
 
   const {
     id,
@@ -299,7 +282,7 @@ function SetScenariotoContent({count1, count2, scenario, testActived, runName, r
   useEffect(() => {
     if (testActived === "true1") {
       if (runName === "stop") {
-        setLoading(false)
+        setCursorWait(false)
       } else {
         setTest1({id, name, description, errorStates, duration, steps, tags, runName, runStartTime,})
       }
@@ -309,7 +292,7 @@ function SetScenariotoContent({count1, count2, scenario, testActived, runName, r
   useEffect(() => {
     if (testActived === "true2") {
       if (runName === "stop") {
-        setLoading(false)
+        setCursorWait(false)
       } else {
         setTest2({id, name, description, errorStates, duration, steps, tags, runName, runStartTime,})
       }
@@ -382,10 +365,11 @@ function ScenariosContent({count1, count2, id, tname, runName, testActived, star
 
 function Features({count1, count2, rid, tname, name:runName, startTime, testActived}) {
   // @ts-ignore
-  const { setLoading } = useLoading()
+  //@ts-ignore
+  const { setCursorWait } = useContext(CursorWaitContext)
   
   useEffect(() => {
-    setLoading(true)
+    setCursorWait(true)
   }, [rid])
 
   const { features } = useFeatures(rid as string)
@@ -563,30 +547,29 @@ function Breadcrumd({project, runName, runs}) {
 }
 
 function LayoutCompare() {
-    // @ts-ignore
-    const { loading } = useLoading()
-
-    const { query } = useRouter()
-    const { id, tname, rid } = query
-    
-    const { run } = useRun(rid as string);
-    const { project } = useProject(id as string)
-    const { runs } = useRuns({
-      projectId: id as string,
-    });
-    return (
-      <div className={`${loading && "cursor-wait"}`}>
-        <Layout>
-          <LayoutHeader>
-            {project?.name !== undefined && <Breadcrumd project={project} runName={run?.name} runs={runs}/>}
-          </LayoutHeader>
-          <div className="md:flex lg:flex xl:flex h-screen bg-white overflow-hidden">
-            <NavMenu tname={tname} runs={runs?.content.map(r => r )} />
-            <Content />
-          </div>
-        </Layout>
-      </div>
-    )
+  //@ts-ignore
+  const { cursorWait } = useContext(CursorWaitContext)
+  const { query } = useRouter()
+  const { id, tname, rid } = query
+  
+  const { run } = useRun(rid as string);
+  const { project } = useProject(id as string)
+  const { runs } = useRuns({
+    projectId: id as string,
+  });
+  return (
+    <div className={`${cursorWait && "cursor-wait"}`}>
+      <Layout>
+        <LayoutHeader>
+          {project?.name !== undefined && <Breadcrumd project={project} runName={run?.name} runs={runs}/>}
+        </LayoutHeader>
+        <div className="md:flex lg:flex xl:flex h-screen bg-white overflow-hidden">
+          <NavMenu tname={tname} runs={runs?.content.map(r => r )} />
+          <Content />
+        </div>
+      </Layout>
+    </div>
+  )
 }
 
 function Compare() {
@@ -596,9 +579,7 @@ function Compare() {
       <TestActived2Provider>
         <Test1Provider>
           <Test2Provider>
-            <LoadingProvider>
-              <LayoutCompare />
-            </LoadingProvider>
+            <LayoutCompare />
           </Test2Provider>
         </Test1Provider>
       </TestActived2Provider>

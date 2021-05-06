@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Layout,
   LayoutHeader,
@@ -36,6 +36,7 @@ import { customFormatDuration, getTotalBy } from "src/utils";
 import { Feature, Run as ApiRun, updateTest} from "src/api";
 import { useRouter } from "next/router";
 import Link from 'next/link';
+import { CursorWaitContext } from 'src/context/cursor-wait-context';
 
 interface FeatureItemProps {
   name: string;
@@ -57,23 +58,6 @@ function useFeature() {
   const context = React.useContext(FeatureContext);
   if (!context) {
     throw new Error("useFeature must be used within a FeatureProvider");
-  }
-  return context;
-}
-
-// @ts-ignore
-const UiDataContext = React.createContext();
-
-function UiDataProvider(props) {
-  const [uiData, setUiData] = React.useState(false);
-  const value = { uiData, setUiData };
-  return <UiDataContext.Provider value={value} {...props} />;
-}
-
-function useUiData() {
-  const context = React.useContext(UiDataContext);
-  if (!context) {
-    throw new Error("useUiData must be used within a UiDataProvider");
   }
   return context;
 }
@@ -146,23 +130,23 @@ function FeatureItem({ name, status, isActive, onClick }: FeatureItemProps) {
 }
 
 function ErrorStateMenuDropdown({ id, errors, featureId }) {
+  //@ts-ignore
+  const { setCursorWait } = useContext(CursorWaitContext)
+  
   const { query } = useRouter();
   const { mutateTests } = useTests({ "deep-populate": true, id: featureId });
-  // @ts-ignore
-  const { setUiData } = useUiData()
-
   const { run } = useRun(query.rid as string);
   const { project } = useProject(run?.project);
   const { errorState } = project ?? {};
 
   const updateErrorState = (error) => async (event) => {
     event.stopPropagation();
-    setUiData(true)
+    setCursorWait(true)
     const { status } = await updateTest({ id, errorStates: [error] });
 
     if (status === 201) {
       await mutateTests()
-      setUiData(false)
+      setCursorWait(false)
     }
   }
 
@@ -828,13 +812,14 @@ function Run() {
   const { run } = useRun(query.rid as string);
   const { project } = useProject(run?.project);
   const { errorState } = project ?? {};
-  // @ts-ignore
-  const { uiData } = useUiData()
+
+  //@ts-ignore
+  const { cursorWait } = useContext(CursorWaitContext)
 
   // @ts-ignore
   const { scrollable } = useScrollable()
   return (
-    <div className={`${uiData && 'cursor-wait'}`}>
+    <div className={`${cursorWait && 'cursor-wait'}`}>
       <Layout>
           <LayoutHeader>
             <div className="flex space-x-4">
@@ -857,13 +842,11 @@ function Run() {
 function RunWithProvider() {
   return (
     <FeatureProvider>
-      <UiDataProvider>
-        <FiltersProvider >
-          <ScrollableProvider>
-            <Run />
-          </ScrollableProvider>
-        </FiltersProvider>
-      </UiDataProvider>
+      <FiltersProvider >
+        <ScrollableProvider>
+          <Run />
+        </ScrollableProvider>
+      </FiltersProvider>
     </FeatureProvider>
   );
 }
