@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import format from "date-fns/format";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -24,7 +24,7 @@ import {
   TagSolidIcon,
   ExclamationSolidIcon,
 } from "src/components";
-import { ProtectRoute, useAlert, useNotification } from "src/context";
+import { CursorWaitContext, ProtectRoute, useAlert, useNotification } from "src/context";
 import { usePagination, useProject, useRuns } from "src/utils/hooks";
 import { config } from "src/utils/tailwind";
 import { customFormatDuration, getTotalBy } from "src/utils";
@@ -51,6 +51,9 @@ function Caption(props) {
 }
 
 function RunsTable() {
+  // @ts-ignore
+  const { cursorWait, setCursorWait } = useContext(CursorWaitContext)
+
   const { query, route, asPath } = useRouter();
   const { mutateProject } = useProject(query.id as string);
   const [filters, setFilters] = React.useState({
@@ -71,17 +74,22 @@ function RunsTable() {
   const notitication = useNotification();
 
   const handleDeleteRun = ({ name, id }) => (e) => {
+    setCursorWait(true)
     const onConfirm = async () => {
       try {
-        await removeRun(id);
-        mutateProject();
-        mutateRuns();
-        notitication.show({
-          title: "Exito",
-          type: "success",
-          message: `The run "${name}" has been successfully removed.`,
-        });
+        const status = await removeRun(id);
+        if (status === 200) {
+          setCursorWait(false)
+          mutateProject();
+          mutateRuns();
+          notitication.show({
+            title: "Exito",
+            type: "success",
+            message: `The run "${name}" has been successfully removed.`,
+          });
+        }
       } catch (error) {
+        setCursorWait(false)
         notitication.show({
           title: "Error",
           type: "error",
