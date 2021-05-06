@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useContext, useEffect, useMemo } from "react";
 import { format } from "date-fns";
 import Link from "next/link";
 import { Project, removeProject } from "src/api";
@@ -17,7 +17,7 @@ import {
   useSearchBox,
   DotsVerticalIcon,
 } from "src/components";
-import { ProtectRoute, useAlert, useNotification } from "src/context";
+import { CursorWaitContext, ProtectRoute, useAlert, useNotification } from "src/context";
 import {
   useModal,
   useProjects,
@@ -55,16 +55,18 @@ function Search({ onSearch }) {
 
 // Principal
 export function Home() {
+  // @ts-ignore
+  const { setCursorWait } = useContext(CursorWaitContext)
+
   const [filters, setFilters] = React.useState({
     page: 0,
     size: 5,
     name: ""
   });
-  const { query } = useRouter();
-  const { mutateProject } = useProject(query.id as string);
+  
   const alert = useAlert();
   const notitication = useNotification();
-  const { projects, isLoading } = useProjects(filters);
+  const { projects, isLoading, mutateProjects } = useProjects(filters);
   const { PaginationComponent, currentPage } = usePagination<Project[]>({
     paginatedObject: projects,
   });
@@ -75,17 +77,21 @@ export function Home() {
 
 
   const handleDeleteProject = ({ name, id }) => (e) => {
-    
     const onConfirm = async () => {
+      setCursorWait(true)
       try {
-        await removeProject(id);
-        mutateProject();
-        notitication.show({
-          title: "Exito",
-          type: "success",
-          message: `The project "${name}" has been successfully removed.`,
-        });
+        const status = await removeProject(id);
+        if (status === 200) {
+          setCursorWait(false)
+          mutateProjects();
+          notitication.show({
+            title: "Exito",
+            type: "success",
+            message: `The project "${name}" has been successfully removed.`,
+          });
+        }
       } catch (error) {
+        setCursorWait(false)
         notitication.show({
           title: "Error",
           type: "error",
