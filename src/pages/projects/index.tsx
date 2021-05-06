@@ -85,7 +85,7 @@ export function Home() {
           setCursorWait(false)
           mutateProjects();
           notitication.show({
-            title: "Exito",
+            title: "Success",
             type: "success",
             message: `The project "${name}" has been successfully removed.`,
           });

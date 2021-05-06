@@ -83,7 +83,7 @@ function RunsTable() {
           mutateProject();
           mutateRuns();
           notitication.show({
-            title: "Exito",
+            title: "Success",
             type: "success",
             message: `The run "${name}" has been successfully removed.`,
           });
