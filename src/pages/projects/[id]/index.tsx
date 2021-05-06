@@ -74,8 +74,8 @@ function RunsTable() {
   const notitication = useNotification();
 
   const handleDeleteRun = ({ name, id }) => (e) => {
-    setCursorWait(true)
     const onConfirm = async () => {
+      setCursorWait(true)
       try {
         const status = await removeRun(id);
         if (status === 200) {
