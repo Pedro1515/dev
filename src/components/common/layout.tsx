@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import classNames from "classnames";
 import { Sidebar } from "src/components/";
+import { CursorWaitContext } from "src/context";
 
 interface Children {
   children: React.ReactNode;
@@ -55,8 +56,10 @@ export function LayoutContent({
 }
 
 export function Layout({ children }) {
+  //@ts-ignore
+  const { cursorWait } = useContext(CursorWaitContext)
   return (
-    <div className="flex h-screen bg-white overflow-hidden">
+    <div className={`${cursorWait && 'cursor-wait'} flex h-screen bg-white overflow-hidden`}>
       <Sidebar />
       <Wrapper>{children}</Wrapper>
     </div>
