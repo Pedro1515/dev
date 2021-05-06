@@ -57,7 +57,7 @@ export class MediaModal extends Component<IMedia> {
         <Modal visible={this.state.isOpen} onClose={() => {}}>
           <div onClick={this.closeModal} className={`${this.state.base64String == "" ? "" : "h-screen"} text-center shadow-2xl`}>
             <div
-              className="ml-10 inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform sm:align-middle"
+              className="ml-12 inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform sm:align-middle"
               style={{ height: "96%" }}
               role="dialog"
               aria-modal="true"
