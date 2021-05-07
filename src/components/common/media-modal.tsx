@@ -26,11 +26,6 @@ export class MediaModal extends Component<IMedia> {
     getMedias(this.props.testId).then((res) => {
       this.setState({ base64String: `${res}` });
     });
-    // if (typeof this.state.base64String === "string") {
-    //   console.log("hoy se come");
-    // } else {
-    //   console.log("hoy no se come");
-    // }
   };
 
   render() {
@@ -55,7 +50,7 @@ export class MediaModal extends Component<IMedia> {
         </div>
 
         <Modal visible={this.state.isOpen} onClose={() => {}}>
-          <div onClick={this.closeModal} className={`${this.state.base64String == "" ? "" : "h-screen"} text-center shadow-2xl`}>
+          <div className={`${this.state.base64String == "" ? "" : "h-screen"} text-center`}>
             <div
               className="ml-12 inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform sm:align-middle"
               style={{ height: "96%" }}
@@ -89,7 +84,7 @@ export class MediaModal extends Component<IMedia> {
                 <>
                 </>
               ) : (
-                <div onClick={this.closeModal} className="inline-block bg-white py-1 px-2 shadow-sm rounded-md cursor-pointer transition duration-200 hover:bg-gray-100">
+                <div onClick={this.closeModal} className="inline-block shadow-2xl bg-white mt-px py-1 px-2 rounded-md cursor-pointer transition duration-200 hover:bg-gray-100">
                   <span className="leading-none text-xl font-medium" aria-hidden="true">&times;</span>
                 </div>
               )}
