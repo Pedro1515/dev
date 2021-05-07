@@ -594,7 +594,7 @@ function AllFeaturesContent({ features }) {
 }
 
 function AllFilterContent({ features, status }) {
-  const { name, startTime, categoryNameList, id, status:featureStatus } = features ?? {};
+  const { name, id, } = features ?? {};
   const { tests, isLoading } = useTests({ "deep-populate": true, id });
   const [f] = tests?.content ?? [];
   const child = f ? f.nodes : [];
@@ -609,7 +609,7 @@ function AllFilterContent({ features, status }) {
       ) : (
         <>
           {child?.map((scenario) => {
-            if (scenario?.status === status) {
+            if (scenario?.status.toUpperCase() === status.toUpperCase()) {
               return <ScenarioCard key={scenario.id} featureName={name} featureId={id} scenario={scenario} />
             }
           })}
@@ -665,7 +665,7 @@ function OneFeatureContent({ feature }) {
 }
 
 function OneFilterContent({ feature, status }) {
-  const { name, startTime, categoryNameList, id, status:featureStatus } = feature ?? {};
+  const { name, startTime, categoryNameList, id } = feature ?? {};
   const { tests, isLoading } = useTests({ "deep-populate": true, id });
   const [f] = tests?.content ?? [];
   const child = f ? f.nodes : [];
@@ -682,7 +682,7 @@ function OneFilterContent({ feature, status }) {
           <FeatureHeading name={name} created={startTime} tags={categoryNameList} />
           <div className="space-y-8">
             {child?.map((scenario) => {
-              if (scenario?.status === status) {
+              if (scenario?.status.toUpperCase() === status.toUpperCase()) {
                 return <ScenarioCard key={scenario.id} featureName={null} featureId={id} scenario={scenario} />
               }
             })}
