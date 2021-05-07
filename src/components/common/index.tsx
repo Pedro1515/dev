@@ -4,6 +4,7 @@ export * from "./badge";
 export * from "./button";
 export * from "./card";
 export * from "./dot";
+export * from "./form-modal";
 export * from "./icon-button";
 export * from "./input";
 export * from "./layout";
