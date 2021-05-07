@@ -272,10 +272,10 @@ function TestCard({ id, name, errorStates, duration, steps, runName, featureId, 
   
   const handleDeleteState = async (id, errorStateTest) => {
     setCursorWait(true)
-    updateTest({ id, errorStates: [errorStateTest] });
+    const { status } = await updateTest({ id, errorStates: [errorStateTest] });
     
-    const done = await mutateTests()
-    if (done) {
+    if (status === 201) {
+      await mutateTests()
       setCursorWait(false)
     }
   };
