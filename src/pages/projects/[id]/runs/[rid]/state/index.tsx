@@ -28,6 +28,7 @@ import { customFormatDuration } from "src/utils";
 import { Feature, Run as ApiRun, Test, updateTest } from "src/api";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface FeatureItemProps {
   name: string;
@@ -259,10 +260,10 @@ function TestCard({ id, name, errorStates, duration, steps, runName, featureId, 
   const { cursorWait, setCursorWait } = useContext(CursorWaitContext)
 
   const formattedDuration = customFormatDuration({ start: 0, end: duration });
-  const [checked, setChecked] = useState(false);
+  const [actived, setActived] = useState(false);
   const count = Math.random();
   const handleCheckbox = (e) => {
-    setChecked(e.target.checked);
+    setActived(e.target.checked);
   };
   const { mutateTests } = useTests({ "deep-populate": true, id: featureId });
 
@@ -287,6 +288,25 @@ function TestCard({ id, name, errorStates, duration, steps, runName, featureId, 
       run: runName,
     })
   }
+
+  const variants = {
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: { duration: 0.25, ease: "easeOut" },
+    },
+    hidden: {
+      opacity: 0,
+      scale: 0.95,
+      transition: { duration: 0.15, ease: "easeIn" },
+    },
+    exit: {
+      opacity: 0,
+      scale: 0.95,
+      transition: { duration: 0.15, ease: "easeIn" },
+    },
+  };
+
   return (
     <>
       <input
@@ -300,7 +320,7 @@ function TestCard({ id, name, errorStates, duration, steps, runName, featureId, 
           <span className="ml-2 text-sm font-medium">{name}</span>
           <div className="h-6 flex float-right">
            <label className={`${cursorWait && "cursor-wait"} w-6 p-1 flex-center cursor-pointer rounded opacity-75 bg-gray-300 transition duration-300 hover:bg-gray-400 mr-3`} htmlFor={`toggle${count}`}>
-             <img className="w-full" src={checked ? "/assets/invisible.png" : "/assets/visible.png" }  alt={checked ? "invisible" : "visible"}/>
+             <img className="w-full" src={actived ? "/assets/invisible.png" : "/assets/visible.png" }  alt={actived ? "invisible" : "visible"}/>
            </label>
            <button className={`${cursorWait && "cursor-wait"} px-2 flex-center cursor-pointer rounded bg-blue-500 transition duration-300 hover:bg-blue-600 focus:outline-none mr-3 focus:outline-none`} onClick={(e) => {handleModal(name, runName)}}>
              <img className="w-4 mr-1" src="/assets/share-option.png" alt="share-option"/>
@@ -345,12 +365,18 @@ function TestCard({ id, name, errorStates, duration, steps, runName, featureId, 
             />
           ))}
         </div>
-        {checked && (
-          <div className="m-2">
-            <div dangerouslySetInnerHTML={{ __html: description }} />
-          </div>
-        )}
-        {checked && <StepsCard steps={steps} bddType={bddType}/>}
+        <AnimatePresence>
+          {actived && (
+            <motion.div initial="hidden" animate="visible" variants={variants} exit="exit">
+              {description && (
+                <div className="m-2">
+                  <div dangerouslySetInnerHTML={{ __html: description }} />
+                </div>
+              )}
+              <StepsCard steps={steps} bddType={bddType}/>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </>
   );
