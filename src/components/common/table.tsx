@@ -50,7 +50,7 @@ export function TableHeader({
 
 export function TableRow({ children, hover, ...props }: TableRowProps) {
   return (
-    <tr className={classNames({ "hover:bg-indigo-100": hover })} {...props}>
+    <tr className={classNames({ "transition duration-200 hover:bg-indigo-100": hover })} {...props}>
       {children}
     </tr>
   );
