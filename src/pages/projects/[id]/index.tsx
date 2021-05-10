@@ -119,8 +119,8 @@ function RunsTable() {
           return (
             <div  className="flex flex-col text-sm">
               <Link href={`${asPath}/runs/${id}`}>
-                  <a className="overflow-hidden truncate whitespace-nowrap no-underline text-sm leading-5 font-medium text-gray-900 hover:text-gray-700 underline">
-                    {name.length > 31 
+                  <a className={`${name.length >= 35 && "truncate"} overflow-hidden no-underline text-sm leading-5 font-medium text-gray-900 hover:text-gray-700 underline`} style={{ width:`${name.length >= 35 ? "95%" : "100%"}` }}>
+                    {name.length >= 35
                     ? (
                       <Tooltip style={{ background: "hsla(0, 0%, 0%, 0.75)", fontSize: "13px", fontWeight: "600", color: "white", border: "none", borderRadius: "4px",}} label={name}>
                         <span>
