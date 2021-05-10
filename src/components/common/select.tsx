@@ -4,6 +4,7 @@ import { Machine } from "xstate";
 import { useMachine } from "@xstate/react";
 import { SelectorIcon } from "src/components/icons";
 import { useOnClickOutside } from "src/utils/hooks";
+import { AnimatePresence, motion } from "framer-motion";
 
 export interface Option {
   label: string;
@@ -59,6 +60,24 @@ export function Select({ name, options, selected, onSelect }: SelectProps) {
     },
     [send]
   );
+
+  const variants = {
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: { duration: 0.1, ease: "easeOut" },
+    },
+    hidden: {
+      opacity: 0,
+      scale: 0.95,
+      transition: { duration: 0.075, ease: "easeIn" },
+    },
+    exit: {
+      opacity: 0,
+      scale: 0.95,
+      transition: { duration: 0.075, ease: "easeIn" },
+    },
+  };
 
   useOnClickOutside(menuRef, toggle);
 
@@ -118,58 +137,62 @@ export function Select({ name, options, selected, onSelect }: SelectProps) {
           </span>
         </button>
       </span>
-      {current.matches("opened") && (
-        <div
-          ref={menuRef}
-          className={classNames(
-            "absolute",
-            "mt-1",
-            "w-full",
-            "rounded-md",
-            "bg-white",
-            "shadow-lg",
-            "z-10"
-          )}
-        >
-          <ul
-            className={classNames(
-              "max-h-56",
-              "rounded-md",
-              "py-1",
-              "text-base",
-              "leading-6",
-              "shadow-xs",
-              "overflow-auto",
-              "focus:outline-none",
-              "sm:text-sm",
-              "sm:leading-5"
-            )}
-          >
-            {options.map((option) => (
-              <li
-                key={option.value}
+      <AnimatePresence>
+        {current.matches("opened") && (
+          <motion.div initial="hidden" animate="visible" variants={variants} exit="exit">
+            <div
+              ref={menuRef}
+              className={classNames(
+                "absolute",
+                "mt-1",
+                "w-full",
+                "rounded-md",
+                "bg-white",
+                "shadow-lg",
+                "z-10"
+              )}
+            >
+              <ul
                 className={classNames(
-                  "text-gray-900",
-                  "cursor-pointer",
-                  "select-none",
-                  "relative",
+                  "max-h-56",
+                  "rounded-md",
                   "py-1",
-                  "pl-3",
-                  "pr-9",
-                  "transition duration-200 hover:bg-gray-200"
+                  "text-base",
+                  "leading-6",
+                  "shadow-xs",
+                  "overflow-auto",
+                  "focus:outline-none",
+                  "sm:text-sm",
+                  "sm:leading-5"
                 )}
-                onClick={handleSelect(option)}
               >
-                <div className="flex items-center space-x-3">
-                  <span className="font-normal block truncate">
-                    {option.label}
-                  </span>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+                {options.map((option) => (
+                  <li
+                    key={option.value}
+                    className={classNames(
+                      "text-gray-900",
+                      "cursor-pointer",
+                      "select-none",
+                      "relative",
+                      "py-1",
+                      "pl-3",
+                      "pr-9",
+                      "transition duration-200 hover:bg-gray-200"
+                    )}
+                    onClick={handleSelect(option)}
+                  >
+                    <div className="flex items-center space-x-3">
+                      <span className="font-normal block truncate">
+                        {option.label}
+                      </span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
