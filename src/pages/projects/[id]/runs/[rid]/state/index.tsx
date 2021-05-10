@@ -521,7 +521,7 @@ function Features({ feature }) {
   // @ts-ignore
   const { scroll } = useScroll();  
   return (
-    <div className={`h-full ${scroll && 'overflow-y-auto'}`}>
+    <div className={`h-full pb-10 ${scroll && 'overflow-y-auto'}`}>
       {feature?.map((features) => {
         return <Scenarios key={features.id} features={features} />;
       })}
