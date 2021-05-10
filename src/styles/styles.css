@@ -28,7 +28,3 @@ li {
 .details-node-html a {
   display: none;
 }
-
-.details-node-html textarea {
-  width: 100%;
-}

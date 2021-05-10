@@ -243,7 +243,7 @@ function Logs({ logs }) {
 
 function StepsCard({ steps = [], bddType }) {
   return bddType === "Scenario" ? (
-    <div className="mt-4 border border-gray-300 rounded-md p-4">
+    <div className="m-2 shadow border border-gray-300 rounded-md p-4">
       <StepWrapper>
         {steps?.map(({ id, status, name, logs }) => (
           <Step key={id} {...{ id, status, name, logs }} />
@@ -315,7 +315,7 @@ function TestCard({ id, name, errorStates, duration, steps, runName, featureId, 
         className="hidden"
         onChange={handleCheckbox}
         />
-      <div className="m-3 p-1 rounded border-t border-gray-200 shadow">
+      <div className="m-3 p-1 rounded border-t border-gray-300 shadow">
         <div>
           <span className="ml-2 text-sm font-medium">{name}</span>
           <div className="h-6 flex float-right">
