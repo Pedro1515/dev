@@ -420,7 +420,7 @@ function FailuresCard() {
         <Title className="text-gray-700 font-semibold">Faults</Title>
         <Caption>Last  {size} runs</Caption>
       </div>
-      <div className="flex-center mt-6 mr-6">
+      <div className="flex-center mt-6 mr-6 -ml-8">
         <AreaChart
           data={data}
           xAxisDataKey="idx"
