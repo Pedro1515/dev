@@ -339,7 +339,7 @@ function TestCard({ id, name, steps = [], errors, featureName, featureId, status
             <span>{status.toUpperCase() === "fail".toUpperCase() && <ErrorStateMenuDropdown {...{ id, errors, featureId }} />}</span>
           </div>
         </div>
-        {featureName && <p className="px-2 inline-block rounded bg-gray-600 text-sm font-medium text-white">Feature: {featureName}</p>}
+        {featureName && <p className="mt-2 px-2 inline-block rounded bg-gray-600 text-sm font-medium text-white">Feature: {featureName}</p>}
         {errors?.length > 0 && (
           <div className="flex items-center">
             <div className="font-medium text-sm">Exceptions</div>
@@ -412,7 +412,7 @@ function ScenarioHeader({ id, name, duration, tags, status, errors, featureName 
         </div>
         {/* {errors && <ErrorStateMenuDropdown {...{ id, errors }} />} */}
       </div>
-      {featureName && <p className="px-2 inline-block rounded bg-gray-600 text-sm font-medium text-white">Feature: {featureName}</p>}
+      {featureName && <p className="mt-2 px-2 inline-block rounded bg-gray-600 text-sm font-medium text-white">Feature: {featureName}</p>}
     </div>
   );
 }
